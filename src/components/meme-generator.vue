@@ -35,20 +35,7 @@
         >
       </div>
 
-      <div class="form-group">
-        <label>TEXT COLOR</label>
-        <span
-          v-for="(color, index) in colors"
-          :key="index"
-        >
-          <span
-            id="span-color"
-            :style="{ background: color }"
-            @click="updateTextColor(color)"
-          >
-          </span>
-        </span>
-      </div>
+      <text-color :colors="colors" />
 
       <button
         class="btn btn-outline-primary"
@@ -62,8 +49,14 @@
 
 <script>
 
+import TextColor from './text-color.vue';
+
 export default {
   name: 'MemeGenerator',
+
+  components: {
+    TextColor
+  },
 
   data() {
     return {
@@ -93,14 +86,25 @@ export default {
   },
 
   created() {
-    this.title = 'Meme Generator';
+    this.setTitle();
+    this.onUpdateTextColor();
   },
 
   methods: {
+    setTitle() {
+      this.title = 'Meme Generator';
+    },
+
     resetInputs() {
       this.text.top = '';
       this.text.bottom = '';
       this.text.color = 'white';
+    },
+
+    onUpdateTextColor() {
+      this.$root.$on('update-text-color', (color) => {
+        this.updateTextColor(color);
+      })
     },
 
     updateTextColor(color) {
@@ -121,16 +125,6 @@ export default {
   width: 100%;
   height: auto;
   max-height: 800px;
-}
-
-#span-color {
-  border: 1px solid #000;
-  border-radius: 50%;
-  cursor: pointer;
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-left: 3px;
 }
 
 .text {
